@@ -1,34 +1,81 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
+interface Item {
+  id: `${string}-${string}-${string}-${string}-${string}`
+  timestamp: number
+  text: string
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [items, setItems] = useState<Item[]>([])
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const { elements } = e.currentTarget
+
+    const input = elements.namedItem('item')
+    const isInput = input instanceof HTMLInputElement
+    if (!isInput || input == null) return
+
+    const newItem: Item = {
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      text: input.value,
+    }
+
+    setItems(items => [...items, newItem])
+    input.value = ''
+  }
+
+  const createHandleRemoveItem = (itemId: string) => () => {
+    setItems(items => items.filter(item => item.id !== itemId))
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <main>
+      <aside>
+        <h1>Prueba técnica de React</h1>
+        <h2>Añadir y eliminar elementos de una lista</h2>
+
+        <form onSubmit={handleSubmit}>
+          <label>
+            Elemento a introducir:
+            <input type="text" required name='item' placeholder='Videojuegos' />
+          </label>
+          <button>Añadir elemento a la lista</button>
+        </form>
+      </aside>
+
+      <section>
+        <h2>Lista de elementos</h2>
+        {
+          items.length === 0 ? (
+            <p>
+              <strong>
+                No hay elementos en la lista.
+              </strong>
+            </p>
+          ) : (
+            <ul>
+              {
+                items.map((item) => (
+                  <li key={item.id}>
+                    {item.text}
+                    <button
+                      onClick={createHandleRemoveItem(item.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </li>
+                ))
+              }
+            </ul>
+          )
+        }
+      </section>
+    </main>
   )
 }
 
