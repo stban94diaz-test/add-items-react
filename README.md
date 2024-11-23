@@ -48,3 +48,5 @@ export default tseslint.config({
   },
 })
 ```
+
+### Based on the tutorial [midudev - PRUEBA TÉCNICA de React para Junior y Trainee](https://www.youtube.com/watch?v=JW_x-Tq5Vt0&ab_channel=midulive)
