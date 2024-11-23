@@ -3,6 +3,7 @@ import { FormItem } from './components/FormItem'
 import { Item } from './components/Item'
 import { NoResultsMsg } from './components/NoResultsMsg'
 import { useItems } from './hooks/useItems'
+import { useSEO } from './hooks/useSEO'
 
 export interface Item {
   id: `${string}-${string}-${string}-${string}-${string}`
@@ -12,6 +13,10 @@ export interface Item {
 
 function App() {
   const { items, addItem, removeItem } = useItems()
+  useSEO({
+    title: `[${items.length}] - Prueba técnica de React`,
+    description: 'Esta app te permite añadir y eliminar elementos de una lista.',
+  })
 
   return (
     <main>
